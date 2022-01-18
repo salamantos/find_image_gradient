@@ -72,36 +72,27 @@ def find_rectangles(image_orig):
 
 
 def plot_results(rectangles, image_orig, image_mask, modified_img):
-    fig, (ax_orig, ax_mask, ax_mod) = plt.subplots(3, 1, figsize=(20, 20))
+    fig, ax_orig = plt.subplots(1, 1, figsize=(20, 10))
     params = {'cmap': 'gray', 'vmin': 0, 'vmax': 255}
 
     ax_orig.imshow(image_orig)
     ax_orig.set_title('Original')
-
-    ax_mask.imshow(image_mask, **params)
-    ax_mask.set_title('Mask')
-
-    ax_mod.imshow(modified_img, **params)
-    ax_mod.set_title('Modified')
 
     for rect in rectangles:
         ax_orig.add_patch(
             patches.Rectangle((rect[1] + 0, rect[0] + 0), rect[3] - rect[1],
                               rect[2] - rect[0], linewidth=1, edgecolor='r',
                               facecolor='none'))
-        ax_mask.add_patch(
-            patches.Rectangle((rect[1], rect[0]), rect[3] - rect[1],
-                              rect[2] - rect[0], linewidth=1, edgecolor='r',
-                              facecolor='none'))
 
     plt.show()
 
 
-def find_coordinates(mask, image_orig):
+def find_coordinates(mask, image_orig, plot=True):
     mask = np.array(list(map(lambda x: list(map(lambda y: 255 if y else 0, x)), mask)))
     rectangles, img = find_rectangles(mask)
 
-    plot_results(rectangles, image_orig, mask, img)
+    if plot:
+        plot_results(rectangles, image_orig, mask, img)
 
 
 if __name__ == '__main__':

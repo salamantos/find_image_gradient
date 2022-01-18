@@ -1,4 +1,4 @@
-from PIL import Image, ImageOps
+from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -28,10 +28,9 @@ def convolve(img, conv_filter):
 
 
 def draw(image, grad, bin_mask, bin_mask_blurred, mask, color):
-    fig, ((ax_orig, ax_man), (ax_bin, ax_bin_blurred_bin)) = plt.subplots(2, 2,
-                                                                          figsize=(
-                                                                          20,
-                                                                          10))
+    fig, (
+        (ax_orig, ax_man), (ax_bin, ax_bin_blurred_bin)
+    ) = plt.subplots(2, 2, figsize=(20, 10))
     # params = {'cmap':'gray', 'vmin': 0, 'vmax': 255}
     params = {'cmap': 'gray'}
 
@@ -68,7 +67,7 @@ def calc_masks(image, color):
     return mask
 
 
-def find_mask(file_name):
+def find_mask(file_name, plot=True):
     with Image.open(file_name) as img:
         image = np.array(img)
 
@@ -82,15 +81,13 @@ def find_mask(file_name):
 
     mask = np.logical_or(np.logical_or(red_mask, green_mask), blue_mask)
 
-
-    fig, ax = plt.subplots(1, 1, figsize=(20, 10))
-    # params = {'cmap':'gray', 'vmin': 0, 'vmax': 255}
-    params = {'cmap': 'gray'}
-
-    ax.imshow(mask, **params)
-    ax.set_title(f'Mask')
-    plt.show()
-
+    if plot:
+        fig, ax = plt.subplots(1, 1, figsize=(20, 10))
+        # params = {'cmap':'gray', 'vmin': 0, 'vmax': 255}
+        params = {'cmap': 'gray'}
+        ax.imshow(mask, **params)
+        ax.set_title(f'Mask')
+        plt.show()
 
     im = Image.fromarray(mask)
     if im.mode != 'RGB':
